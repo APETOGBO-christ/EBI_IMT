@@ -1,26 +1,318 @@
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════════════════════
+   EBI-IMT — "OPERATIONS"
+   Ink + paper + a single amber signal.
+   Bricolage Grotesque · Inter · JetBrains Mono
+═══════════════════════════════════════════════════════════ */
+
+/* ── LIGHT — "Daylight" (Lyrie blue-grey, refined) ── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-base:      #e7ebf1;
+  --bg-surface:   #eef1f6;
+  --bg-card:      #ffffff;
+  --bg-inset:     #f4f6fa;
+
+  --text-primary:   #0b1220;
+  --text-secondary: #4a5567;
+  --text-muted:     #8a93a3;
+
+  --hairline:       rgba(11,18,32,0.10);
+  --border:         rgba(11,18,32,0.10);
+  --border-strong:  rgba(11,18,32,0.18);
+
+  /* the one signal color */
+  --signal:        #e08700;   /* fills, dots, bars */
+  --signal-text:   #b45309;   /* legible amber on light */
+  --signal-soft:   rgba(224,135,0,0.10);
+  --signal-line:   rgba(224,135,0,0.28);
+
+  /* high-contrast button = ink */
+  --btn-bg:  #0b1220;
+  --btn-fg:  #ffffff;
+
+  --shadow-card:  0 1px 2px rgba(11,18,32,0.04), 0 8px 24px -12px rgba(11,18,32,0.10);
+
+  --navbar-bg:    rgba(231,235,241,0.82);
+  --grid-line:    rgba(11,18,32,0.045);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ── DARK — "Nightwatch" (the 24/7 shift) ── */
+.dark {
+  --bg-base:      #070a12;
+  --bg-surface:   #0b0f18;
+  --bg-card:      #0e131d;
+  --bg-inset:     #0a0e16;
+
+  --text-primary:   #e8ecf4;
+  --text-secondary: #9aa4b4;
+  --text-muted:     #5a6478;
+
+  --hairline:       rgba(255,255,255,0.08);
+  --border:         rgba(255,255,255,0.08);
+  --border-strong:  rgba(255,255,255,0.16);
+
+  --signal:        #ffb020;
+  --signal-text:   #ffb84d;
+  --signal-soft:   rgba(255,176,32,0.10);
+  --signal-line:   rgba(255,176,32,0.30);
+
+  --btn-bg:  #e8ecf4;
+  --btn-fg:  #0b1220;
+
+  --shadow-card:  none;
+
+  --navbar-bg:    rgba(7,10,18,0.78);
+  --grid-line:    rgba(255,255,255,0.035);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* ═══════════════════════════════════════════════════════════
+   BASE
+═══════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; }
+html { scroll-behavior: smooth; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-body), system-ui, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display), system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.font-mono { font-family: var(--font-mono), ui-monospace, monospace; }
+
+::selection { background: var(--signal); color: #0b1220; }
+
+/* ═══════════════════════════════════════════════════════════
+   MONO LABEL / EYEBROW — the "systems" voice
+═══════════════════════════════════════════════════════════ */
+.label {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* tag-pill kept for compatibility → now a mono status chip */
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 7px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--signal-text);
+  background: var(--signal-soft);
+  border: 1px solid var(--signal-line);
+}
+.dark .tag-pill { color: var(--signal-text); }
+
+/* ═══════════════════════════════════════════════════════════
+   SIGNAL DOT — the heartbeat that never stops
+═══════════════════════════════════════════════════════════ */
+.signal-dot {
+  position: relative;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--signal);
+  flex-shrink: 0;
+}
+.signal-dot::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1px solid var(--signal);
+  animation: pulse-ring 2.4s ease-out infinite;
+}
+@keyframes pulse-ring {
+  0%   { transform: scale(0.6); opacity: 0.9; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PANELS — solid control-room cards (replaces glass)
+═══════════════════════════════════════════════════════════ */
+.glass,
+.panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.25s, background 0.25s, transform 0.25s;
+}
+.glass-strong {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+}
+
+/* inset / recessed surface (consoles, code-like blocks) */
+.inset {
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   HEADLINE ACCENT — one amber word per heading (disciplined)
+   (repurposes the old gradient utilities, no markup churn)
+═══════════════════════════════════════════════════════════ */
+.gradient-text { color: var(--signal-text); }
+.gradient-text-blue { color: var(--text-primary); }
+
+/* ═══════════════════════════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════════════════════════ */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-weight: 600;
+  padding: 0.7rem 1.4rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  letter-spacing: -0.01em;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s;
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 24px -12px rgba(11,18,32,0.5); }
+.dark .btn-primary:hover { box-shadow: 0 0 0 1px var(--signal-line), 0 12px 30px -16px rgba(0,0,0,0.8); }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  padding: 0.7rem 1.4rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  border: 1px solid var(--border-strong);
+  background: transparent;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+}
+.btn-secondary:hover { border-color: var(--signal-line); background: var(--signal-soft); transform: translateY(-1px); }
+
+/* ═══════════════════════════════════════════════════════════
+   SERVICE CARD hover (kept name)
+═══════════════════════════════════════════════════════════ */
+.service-card { transition: border-color 0.25s, transform 0.25s, background 0.25s; }
+.service-card:hover { transform: translateY(-3px); border-color: var(--border-strong); }
+
+/* glow-border neutralised — discipline over decoration */
+.glow-border::before { content: none; }
+
+/* ═══════════════════════════════════════════════════════════
+   STAT VALUE
+═══════════════════════════════════════════════════════════ */
+.stat-value {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: clamp(2.5rem, 5vw, 3.75rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--text-primary);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   NAVBAR
+═══════════════════════════════════════════════════════════ */
+.navbar-blur {
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  background: var(--navbar-bg);
+  border-bottom: 1px solid var(--hairline);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TECHNICAL GRID (hero only, very faint)
+═══════════════════════════════════════════════════════════ */
+.grid-noise {
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* orbs removed — the blurry-gradient look is gone */
+.orb { display: none !important; }
+
+/* ═══════════════════════════════════════════════════════════
+   HAIRLINE DIVIDER
+═══════════════════════════════════════════════════════════ */
+.divider { height: 1px; background: var(--hairline); }
+.divider-signal {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--signal-line) 50%, transparent);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INPUTS
+═══════════════════════════════════════════════════════════ */
+.input-field {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  color: var(--text-primary);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 0.9rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+.input-field::placeholder { color: var(--text-muted); }
+.input-field:focus {
+  border-color: var(--signal-line);
+  box-shadow: 0 0 0 3px var(--signal-soft);
+}
+select.input-field {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%238a93a3'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1rem;
+  padding-right: 2.5rem;
+}
+select.input-field option { background: var(--bg-card); color: var(--text-primary); }
+
+/* ═══════════════════════════════════════════════════════════
+   SCROLLBAR
+═══════════════════════════════════════════════════════════ */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-base); }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--signal); }
+
+/* ═══════════════════════════════════════════════════════════
+   KEYFRAMES
+═══════════════════════════════════════════════════════════ */
+@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
+.blink { animation: blink 1.4s steps(2, start) infinite; }
+
+/* slow cinematic drift on hero imagery */
+@keyframes kenburns { 0% { transform: scale(1); } 100% { transform: scale(1.08); } }
+.kenburns { animation: kenburns 22s ease-out forwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
 }
