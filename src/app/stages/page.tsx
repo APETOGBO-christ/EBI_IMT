@@ -65,7 +65,7 @@ export default function StagesPage() {
       {/* Hero avec photo */}
       <section className="relative min-h-[68vh] flex items-end overflow-hidden">
         <div className="absolute inset-0">
-          <Image src="/Stage.jpg" alt="Équipe EBI-IMT" fill className="object-cover" priority />
+          <Image src="/Stage.jpg" alt="Équipe EBI-IMT" fill className="object-cover object-top" priority />
           <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(7,10,18,0.95) 0%, rgba(7,10,18,0.55) 55%, rgba(7,10,18,0.25) 100%)" }} />
         </div>
         <div className="relative max-w-7xl mx-auto px-5 sm:px-8 pb-20 pt-40 w-full">
