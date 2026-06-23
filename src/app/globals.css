@@ -69,10 +69,15 @@
 /* ═══════════════════════════════════════════════════════════
    BASE
 ═══════════════════════════════════════════════════════════ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; }
-html { scroll-behavior: smooth; }
+*, *::before, *::after { box-sizing: border-box; }
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
 
 body {
+  width: 100vw;
+  overflow-x: hidden;
   background: var(--bg-base);
   color: var(--text-primary);
   font-family: var(--font-body), system-ui, sans-serif;
@@ -80,7 +85,6 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   transition: background 0.3s ease, color 0.3s ease;
-  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, .font-display {
@@ -192,6 +196,7 @@ h1, h2, h3, h4, .font-display {
 }
 .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 24px -12px rgba(11,18,32,0.5); }
 .dark .btn-primary:hover { box-shadow: 0 0 0 1px var(--signal-line), 0 12px 30px -16px rgba(0,0,0,0.8); }
+.btn-primary:disabled { opacity: 0.55; pointer-events: none; }
 
 .btn-secondary {
   display: inline-flex;
@@ -213,9 +218,6 @@ h1, h2, h3, h4, .font-display {
 ═══════════════════════════════════════════════════════════ */
 .service-card { transition: border-color 0.25s, transform 0.25s, background 0.25s; }
 .service-card:hover { transform: translateY(-3px); border-color: var(--border-strong); }
-
-/* glow-border neutralised — discipline over decoration */
-.glow-border::before { content: none; }
 
 /* ═══════════════════════════════════════════════════════════
    STAT VALUE
@@ -249,9 +251,6 @@ h1, h2, h3, h4, .font-display {
   background-size: 56px 56px;
 }
 
-/* orbs removed — the blurry-gradient look is gone */
-.orb { display: none !important; }
-
 /* ═══════════════════════════════════════════════════════════
    HAIRLINE DIVIDER
 ═══════════════════════════════════════════════════════════ */
@@ -284,7 +283,7 @@ h1, h2, h3, h4, .font-display {
 select.input-field {
   cursor: pointer;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%238a93a3'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 1rem center;
   background-size: 1rem;
@@ -303,8 +302,6 @@ select.input-field option { background: var(--bg-card); color: var(--text-primar
 /* ═══════════════════════════════════════════════════════════
    KEYFRAMES
 ═══════════════════════════════════════════════════════════ */
-@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
 .blink { animation: blink 1.4s steps(2, start) infinite; }
 

@@ -1,17 +1,28 @@
 "use client";
 
 import { useState } from "react";
-import { Mail, Phone, Send, CheckCircle2 } from "lucide-react";
+import { Phone, Send, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
 import AnimatedSection from "@/components/AnimatedSection";
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: "", company: "", email: "", phone: "", service: "", message: "" });
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(true);
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error();
+      setStatus("success");
+    } catch {
+      setStatus("error");
+    }
   };
 
   return (
@@ -124,7 +135,7 @@ export default function ContactPage() {
 
               {/* Right — form */}
               <div className="lg:col-span-3 p-8 lg:p-10" style={{ background: "var(--bg-card)" }}>
-                {sent ? (
+                {status === "success" ? (
                   <div className="flex flex-col items-center justify-center h-full py-16 text-center">
                     <CheckCircle2 className="w-14 h-14 mx-auto mb-5" style={{ color: "var(--signal)" }} />
                     <h2 className="font-display text-2xl font-bold mb-3" style={{ color: "var(--text-primary)" }}>Message envoyé.</h2>
@@ -134,30 +145,37 @@ export default function ContactPage() {
                   <>
                     <h2 className="font-display text-2xl font-bold mb-1" style={{ color: "var(--text-primary)" }}>Votre demande</h2>
                     <p className="text-sm mb-8" style={{ color: "var(--text-muted)" }}>Audit gratuit · Sans engagement</p>
+
+                    {status === "error" && (
+                      <div className="mb-6 p-3 rounded-lg text-sm" style={{ background: "rgba(220,38,38,0.12)", border: "1px solid rgba(220,38,38,0.3)", color: "#ef4444" }}>
+                        Une erreur s&apos;est produite. Veuillez réessayer ou nous écrire directement à <a href="mailto:ebi-togo@hotmail.com" style={{ textDecoration: "underline" }}>ebi-togo@hotmail.com</a>.
+                    </div>
+                    )}
+
                     <form onSubmit={handleSubmit} className="space-y-4">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                          <label className="label block mb-1.5">Prénom & Nom *</label>
-                          <input required className="input-field" placeholder="Jean Dupont" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+                          <label htmlFor="name" className="label block mb-1.5">Prénom & Nom *</label>
+                          <input id="name" required className="input-field" placeholder="Jean Dupont" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
                         </div>
                         <div>
-                          <label className="label block mb-1.5">Entreprise</label>
-                          <input className="input-field" placeholder="Mon Entreprise" value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} />
+                          <label htmlFor="company" className="label block mb-1.5">Entreprise</label>
+                          <input id="company" className="input-field" placeholder="Mon Entreprise" value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} />
                         </div>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                          <label className="label block mb-1.5">Email *</label>
-                          <input required type="email" className="input-field" placeholder="vous@entreprise.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+                          <label htmlFor="email" className="label block mb-1.5">Email *</label>
+                          <input id="email" required type="email" className="input-field" placeholder="vous@entreprise.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
                         </div>
                         <div>
-                          <label className="label block mb-1.5">Téléphone</label>
-                          <input type="tel" className="input-field" placeholder="+228 XX XX XX XX" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+                          <label htmlFor="phone" className="label block mb-1.5">Téléphone</label>
+                          <input id="phone" type="tel" className="input-field" placeholder="+228 XX XX XX XX" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
                         </div>
                       </div>
                       <div>
-                        <label className="label block mb-1.5">Service souhaité</label>
-                        <select className="input-field" value={form.service} onChange={(e) => setForm({ ...form, service: e.target.value })}>
+                        <label htmlFor="service" className="label block mb-1.5">Service souhaité</label>
+                        <select id="service" className="input-field" value={form.service} onChange={(e) => setForm({ ...form, service: e.target.value })}>
                           <option value="">Choisir un service</option>
                           <option>Intégration systèmes & réseaux</option>
                           <option>Support & maintenance</option>
@@ -169,11 +187,11 @@ export default function ContactPage() {
                         </select>
                       </div>
                       <div>
-                        <label className="label block mb-1.5">Votre besoin *</label>
-                        <textarea required rows={5} className="input-field resize-none" placeholder="Décrivez votre projet ou problème en quelques lignes..." value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} />
+                        <label htmlFor="message" className="label block mb-1.5">Votre besoin *</label>
+                        <textarea id="message" required rows={5} className="input-field resize-none" placeholder="Décrivez votre projet ou problème en quelques lignes..." value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} />
                       </div>
-                      <button type="submit" className="btn-primary w-full justify-center py-3.5">
-                        Envoyer ma demande <Send className="w-4 h-4" />
+                      <button type="submit" disabled={status === "loading"} className="btn-primary w-full justify-center py-3.5" style={status === "loading" ? { opacity: 0.6, pointerEvents: "none" } : undefined}>
+                        {status === "loading" ? "Envoi en cours..." : "Envoyer ma demande"} <Send className="w-4 h-4" />
                       </button>
                     </form>
                   </>

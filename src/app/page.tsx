@@ -465,29 +465,54 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══ RICOH BRUSSELS — Présence internationale ══ */}
-      <section className="relative py-28 overflow-hidden">
-        <div className="absolute inset-0">
-          <Image src="/img/ricoh_brussels.jpg" alt="EBI-IMT au RICOH Business Partner Conference, Bruxelles 2025" fill className="object-cover object-center" />
-          <div className="absolute inset-0" style={{ background: "linear-gradient(to right, rgba(7,10,18,0.92) 42%, rgba(7,10,18,0.55) 100%)" }} />
-        </div>
-        <div className="relative max-w-7xl mx-auto px-5 sm:px-8">
-          <AnimatedSection>
-            <div className="max-w-xl">
-              <div className="font-mono text-[11px] tracking-[0.16em] uppercase flex items-center gap-3 mb-6" style={{ color: "var(--signal)" }}>
-                <span className="signal-dot" /> Présence internationale
-              </div>
-              <h2 className="font-display text-4xl sm:text-5xl font-bold text-white tracking-tight mb-5 leading-[1.05]">
-                Reconnu par <span style={{ color: "var(--signal)" }}>RICOH World.</span>
-              </h2>
-              <p className="text-white/65 text-lg leading-relaxed mb-8">
-                En avril 2025, EBI-IMT était présent à la RICOH Business Partner Conference à Bruxelles — aux côtés des partenaires stratégiques mondiaux RICOH. Une reconnaissance internationale pour une expertise enracinée en Afrique de l&apos;Ouest.
-              </p>
-              <div className="font-mono text-sm tracking-widest uppercase" style={{ color: "rgba(255,255,255,0.35)" }}>
-                RICOH Business Partner Conference · Bruxelles · Avril 2025
-              </div>
-            </div>
+      {/* ══ RICOH BRUSSELS — Présence internationale (bento panel, pas full-bleed) ══ */}
+      <section className="py-24" style={{ borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-8">
+          <AnimatedSection className="mb-8">
+            <div className="label mb-5" style={{ color: "var(--signal-text)" }}>// Reconnaissance</div>
+            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight leading-[1.05]" style={{ color: "var(--text-primary)" }}>
+              Présence <span style={{ color: "var(--signal-text)" }}>internationale.</span>
+            </h2>
           </AnimatedSection>
+
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
+            <AnimatedSection direction="left" className="lg:col-span-2">
+              <div className="relative rounded-2xl overflow-hidden aspect-[4/3] lg:aspect-auto h-full min-h-[300px]" style={{ border: "1px solid var(--border)" }}>
+                <Image src="/img/ricoh_brussels.jpg" alt="EBI-IMT au RICOH Business Partner Conference, Bruxelles 2025" fill className="object-cover object-center" />
+                <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(7,10,18,0.5), transparent 45%)" }} />
+                <div className="absolute bottom-3 left-3 font-mono text-[10px] tracking-widest uppercase px-2.5 py-1 rounded text-white flex items-center gap-2" style={{ background: "rgba(7,10,18,0.6)", border: "1px solid rgba(255,255,255,0.2)", backdropFilter: "blur(6px)" }}>
+                  <span className="w-1.5 h-1.5 rounded-full" style={{ background: "var(--signal)" }} /> Bruxelles · Avril 2025
+                </div>
+              </div>
+            </AnimatedSection>
+
+            <AnimatedSection direction="right" className="lg:col-span-3">
+              <div className="panel rounded-2xl p-8 lg:p-10 h-full flex flex-col justify-center">
+                <div className="flex items-center gap-2.5 mb-4">
+                  <span className="signal-dot" />
+                  <span className="font-mono text-[10px] tracking-widest uppercase" style={{ color: "var(--signal-text)" }}>RICOH Business Partner Conference</span>
+                </div>
+                <h3 className="font-display text-2xl sm:text-3xl font-bold mb-4 leading-tight" style={{ color: "var(--text-primary)" }}>
+                  Reconnu par <span style={{ color: "var(--signal-text)" }}>RICOH World.</span>
+                </h3>
+                <p className="text-sm leading-relaxed mb-7" style={{ color: "var(--text-secondary)" }}>
+                  En avril 2025, EBI-IMT était présent à la RICOH Business Partner Conference à Bruxelles — aux côtés des partenaires stratégiques mondiaux RICOH. Une reconnaissance internationale pour une expertise enracinée en Afrique de l&apos;Ouest.
+                </p>
+                <div className="flex flex-wrap gap-x-8 gap-y-3 pt-5 border-t" style={{ borderColor: "var(--border)" }}>
+                  {[
+                    { label: "Événement", value: "Partner Conference" },
+                    { label: "Lieu", value: "Bruxelles, Belgique" },
+                    { label: "Statut", value: "Partenaire agréé" },
+                  ].map(({ label, value }) => (
+                    <div key={label}>
+                      <p className="font-mono text-[10px] tracking-widest uppercase mb-0.5" style={{ color: "var(--text-muted)" }}>{label}</p>
+                      <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{value}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </AnimatedSection>
+          </div>
         </div>
       </section>
 
